@@ -1379,7 +1379,7 @@
     integer appfiletyp,lz,ltf1,linewp
 ! appending an multiplot in ocplot2B
 ! sleep time in microseconds
-    integer, parameter :: us=500000
+    integer, parameter :: ms=500
     integer multibuffline
     character multibuffer(maxmultiplotlines)*128
     logical appendmultiplot
@@ -2104,7 +2104,7 @@
     write(*,*)'ocplot2B executing command: "start /B '//trim(gnuplotline)//'"'
           call execute_command_line('start /B '//trim(gnuplotline))
 ! sleep 500 miliseconds
-          call usleep(us)
+          call millisleep(ms)
 ! WORKS WITH OCPLOT3B
 !          call execute_command_line('start /B '//trim(gnuplotline))
        else
@@ -2113,7 +2113,7 @@
           write(*,*)'ocplot2B executing command: "'//trim(gnuplotline)//'"'
           call execute_command_line(gnuplotline)
 ! sleep 500 miliseconds
-          call usleep(us)
+          call millisleep(ms)
        endif
     else
 ! plot on non-windows system without "start /B ...
@@ -2121,7 +2121,7 @@
        write(*,*)'executing command: '//trim(gnuplotline)
        call execute_command_line(gnuplotline)
 ! sleep 500 miliseconds
-       call usleep(us)
+       call millisleep(ms)
     endif
 1000 continue
     return
@@ -2574,7 +2574,7 @@
 !    integer noofmono,jjj,monovariant2(100)
     integer, parameter :: monovariantborder=11
     integer xtieline,xmonovariant,lz
-    integer, parameter :: us=500000
+    integer, parameter :: ms=500
 ! now a global variable
 !    character monovariant*6
 ! Gibbs triangle variables
@@ -3462,12 +3462,12 @@
 ! WORKS WITH OCPLOT3B
           call execute_command_line('start /B '//trim(gnuplotline))
 ! sleep 500 miliseconds
-          call usleep(us)
+          call millisleep(ms)
        else
           write(*,*)'ocplot3B executing command '//trim(gnuplotline)
           call execute_command_line(gnuplotline)
 ! sleep 500 miliseconds
-          call usleep(us)
+          call millisleep(ms)
        endif
     else
 ! plot on non-windows system
@@ -3475,7 +3475,7 @@
        write(*,*)'executing command '//trim(gnuplotline)
        call execute_command_line(gnuplotline)
 ! sleep 500 miliseconds
-       call usleep(us)
+       call millisleep(ms)
     endif
 !900 continue
 1000 continue

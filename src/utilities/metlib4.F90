@@ -90,6 +90,12 @@ MODULE METLIB
 !  1360 Missing column number for substitution
 !
 !----------------------------------------------------------
+abstract interface
+    SUBROUTINE PROMT_FUNC(PROMT,LINE)
+        implicit none
+        CHARACTER PROMT*(*),LINE*(*)
+    END SUBROUTINE PROMT_FUNC
+end interface
 !
 ! global variables and constants
 !  IMPLICIT DOUBLE PRECISION (A-H,O-Z)
@@ -2015,7 +2021,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*)
     integer last,ival,idef
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*512
     integer iflag
@@ -2036,7 +2042,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*)
     integer last,ival,idef
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*80
     integer iflag
@@ -2059,7 +2065,7 @@ CONTAINS
     CHARACTER PROMT*(*),SVAR*(*)
     integer last
     double precision val,rdef
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*80
     integer iflag
@@ -2082,7 +2088,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*)
     integer last
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
     double precision val,rdef
 !\end{verbatim} %+
     CHARACTER SLIN*80
@@ -2105,7 +2111,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*)
     integer last,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*80
     integer iflag
@@ -2130,7 +2136,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*)
     integer last,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
 !
     CHARACTER SLIN*80
@@ -2158,7 +2164,7 @@ CONTAINS
     integer last,ival
     character*1 str,cdef
     double precision val,rdef
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     GPARITYP=3
     GPARWDEF=.TRUE.
@@ -2176,7 +2182,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*)
     integer last,ival
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
     double precision val,rdef
     character*1 str,cdef
 !\end{verbatim} %+
@@ -2206,7 +2212,7 @@ CONTAINS
     integer last,ival,idef
     character*1 str,cdef
     double precision val
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     GPARITYP=1
     GPARWDEF=.TRUE.
@@ -2226,7 +2232,7 @@ CONTAINS
     integer last,ival,idef
     character*1 str,cdef
     double precision val
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     GPARITYP=1
     GPARWDEF=.FALSE.
@@ -2244,7 +2250,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),str*(*),cdef*(*)
     integer last,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
 !...SUBROUTINE GQARCD
 !      JTYP DEFINES THE TERMINATION OF A STRING
@@ -2302,7 +2308,7 @@ CONTAINS
     CHARACTER PPROMT*132,CH2*1
 !    LOGICAL EOLCH,SG2ERR,WDEF,MATP
     LOGICAL WDEF,MATP
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     integer last,ival
     double precision val
@@ -2552,7 +2558,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*)
     integer last,ival,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
     double precision val
     character str*(*),cdef*(*)
 !\end{verbatim} %+
@@ -2606,7 +2612,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*)
     integer last,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim}
     CHARACTER SLIN*80
     integer typ,typeahead,kk,iflag
@@ -2686,7 +2692,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last,ival,idef
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*512
     integer iflag
@@ -2707,7 +2713,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last,ival,idef
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*80
     integer iflag
@@ -2730,7 +2736,7 @@ CONTAINS
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last
     double precision val,rdef
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     CHARACTER SLIN*80
     integer iflag
@@ -2753,7 +2759,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
     double precision val,rdef
 !\end{verbatim} %+
     CHARACTER SLIN*80
@@ -2776,7 +2782,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*),hyper*(*)
     integer last,jtyp
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
 !
     CHARACTER SLIN*80
@@ -2805,7 +2811,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*),hyper*(*)
     integer last,jtyp
-!    EXTERNAL HELP now always use Q4HELP
+!    procedure(PROMT_FUNC) :: HELP now always use Q4HELP
 !\end{verbatim} %+
 !
     CHARACTER SLIN*80
@@ -2857,7 +2863,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last,ival,idef
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
 ! dummy variables for gparallx
     character*1 str,cdef
@@ -2879,7 +2885,7 @@ CONTAINS
     CHARACTER PROMT*(*),SVAR*(*),hyper*(*)
     integer last
     double precision val,rdef
-    EXTERNAL HELP
+    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim} %+
     character*1 str,cdef
     integer ival
@@ -2919,7 +2925,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),str*(*),cdef*(*),hyper*(*)
     integer last,jtyp
-!    EXTERNAL HELP no longer needed
+!    procedure(PROMT_FUNC) :: HELP no longer needed
 !\end{verbatim} %+
 !...SUBROUTINE GQARCDX
 !      JTYP DEFINES THE TERMINATION OF A STRING
@@ -2967,7 +2973,7 @@ CONTAINS
     implicit none
     CHARACTER PROMT*(*),SVAR*(*),str*(*),cdef*(*),hyper*(*)
     integer last,jtyp
-!    EXTERNAL HELP no longer needed
+!    procedure(PROMT_FUNC) :: HELP no longer needed
 !\end{verbatim} %+
 !...SUBROUTINE GQARCx
 !      JTYP DEFINES THE TERMINATION OF A STRING
@@ -3033,7 +3039,7 @@ CONTAINS
     CHARACTER PROMT*(*),SVAR*(*),CH1*1,CDEF*(*),STRING*(*),hyper*(*)
     integer ival
     double precision val
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim}
     CHARACTER PPROMT*132,CH2*1,ssd*30
     LOGICAL WDEF,MATP
@@ -3414,7 +3420,7 @@ CONTAINS
 !    IMPLICIT DOUBLE PRECISION (A-H,O-Z)
     CHARACTER PROMT*(*),SVAR*(*),CDEF*(*),SVAL*(*),hyper*(*)
     integer last,jtyp
-!    EXTERNAL HELP
+!    procedure(PROMT_FUNC) :: HELP
 !\end{verbatim}
     CHARACTER SLIN*256
     integer typ,typeahead,kk,iflag
@@ -6990,9 +6996,10 @@ CONTAINS
 
 !\addtotable subroutine hphelp & Help to HP calculator
 !\begin{verbatim}
-  SUBROUTINE HPHLP
+  SUBROUTINE HPHLP(PROMT,LINE)
 ! writes a help text for using the online HP calculator
     implicit none
+    CHARACTER PROMT*(*),LINE*(*)
 !\end{verbatim}
     WRITE(*,10)
 10  FORMAT(' This is a revese polish calculator'/&
@@ -7146,7 +7153,7 @@ CONTAINS
     if(buperr.ne.0) then
        buperr=0
 !       IF(LINE(1:1).EQ.'?') CALL WPHLP(IP,LINE)
-       IF(LINE(1:1).EQ.'?') CALL WPHLP
+       IF(LINE(1:1).EQ.'?') CALL WPHLP('','')
        IF(LINE(1:1).EQ.'@') GOTO 900
        WRITE(KOU,20)
 20     FORMAT(' TYPE ? FOR HELP'/)
@@ -7238,9 +7245,10 @@ CONTAINS
 !\addtotable subroutine wphlp & Help to patch workspace
 !\begin{verbatim}
 !  SUBROUTINE WPHLP(ITYP,LINE)
-  SUBROUTINE WPHLP
+  SUBROUTINE WPHLP(PROMT,LINE)
 !...HELP ROUTINE FOR WPATCH
     implicit none
+    CHARACTER PROMT*(*),LINE*(*)
 !    CHARACTER LINE*(*)
 !    integer ityp
 !\end{verbatim} %+

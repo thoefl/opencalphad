@@ -21,19 +21,20 @@ MODULE ocsmp
 !------------------------------
 !
   use liboceqplus
-! this to implement sleep
-  use, intrinsic:: iso_c_binding, only: c_int
+  use iso_fortran_env, only: int64
+!! this to implement sleep
+!  use, intrinsic:: iso_c_binding, only: c_int
 !
   implicit none
   character*8, parameter :: smpversion='SMP-2.30'
 !
-! this interface added to sleep after GNUPLOT command
-  interface
-     subroutine usleep(us) bind (C)
-       import c_int
-       integer(c_int), value :: us
-     end subroutine usleep
-  end interface
+!! this interface added to sleep after GNUPLOT command
+!  interface
+!     subroutine usleep(us) bind (C)
+!       import c_int
+!       integer(c_int), value :: us
+!     end subroutine usleep
+!  end interface
 !
 ! note the type map_fixph declared in matsmin.F90 (in liboceq)
 !
@@ -390,6 +391,18 @@ MODULE ocsmp
 !
 CONTAINS
 
+    ! sleep for ms milliseconds using wall time
+    subroutine millisleep(ms)
+        integer, intent(in) :: ms
+        integer(int64) :: t_wallcount, t_wallrate, t_wallcount_finish
+    
+        call system_clock(t_wallcount, t_wallrate)
+        t_wallcount_finish = t_wallcount + ms*t_wallrate/1000
+        do
+            call system_clock(t_wallcount)
+            if(t_wallcount >= t_wallcount_finish) exit
+        end do
+    end subroutine millisleep
   ! routines to calculate the diagrams
   include "smp2A.F90"
 

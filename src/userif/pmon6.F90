@@ -69,7 +69,7 @@ contains
     double precision finish2,start2
     integer endoftime,startoftime
 ! separate file names for remembering and providing a default
-    character ocmfile*128,ocufile*128,tdbfile*128,ocdfile*128,filename*128
+    character(len=256) :: ocmfile,ocufile,tdbfile,ocdfile,filename
 ! home for OC and default directory for databases
 !    character ochome*64,ocbase*64, change suggested by Chunhui
     character ochome*128,ocbase*128
@@ -2631,7 +2631,7 @@ contains
                 enddo
                 string(j4:)=' '
 ! this is a gfortran special extension
-                call chdir(string,i1)
+                call chdir(trim(string),i1)
                 if(i1.ne.0) then
                    write(*,*)'Failed change working directory',i1
                 else
