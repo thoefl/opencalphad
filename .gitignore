@@ -13,7 +13,6 @@
 *.toc
 *.ocu
 *~
-*.txt
 .*
 crfemo-1400-leftcorner.pdf
 examples/macros/cp-cumg2.pdf

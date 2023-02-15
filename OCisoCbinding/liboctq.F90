@@ -86,11 +86,6 @@ module liboctq
   implicit none
 !
 !
-! Single precision real numbers
-  integer, parameter :: sp = selected_real_kind(6)
-
-! Double precision real numbers
-  integer, parameter :: dp = selected_real_kind(15)
   integer, parameter :: maxc=maxel,maxp=maxph
 !
 contains

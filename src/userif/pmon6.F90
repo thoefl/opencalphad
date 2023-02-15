@@ -27,6 +27,7 @@ MODULE cmon1oc
 !
   use ocsmp
   use liboceqplus
+  use mod_th
 ! 
 ! parallel processing, set in gtp3.F90
 !$  use omp_lib
@@ -235,7 +236,7 @@ contains
     integer, parameter :: ncbas=30,nclist=24,ncalc=18,ncent=21,ncread=9
     integer, parameter :: ncam1=18,ncset=27,ncadv=15,ncstat=6,ncdebug=12
     integer, parameter :: nselect=6,nlform=6,noptopt=9,nsetbit=6
-    integer, parameter :: ncamph=18,naddph=12,nclph=6,nccph=6,nrej=9,nsetph=6
+    integer, parameter :: ncamph=18,naddph=12,nclph=6,nccph=7,nrej=9,nsetph=6
     integer, parameter :: nsetphbits=15,ncsave=6,nplt=15,nstepop=9
     integer, parameter :: nplt2=18
     integer, parameter :: ninf=15
@@ -301,7 +302,8 @@ contains
 ! subcommands to CALCULATE PHASE
     character (len=16), dimension(nccph) :: ccph=&
          ['ONLY_G          ','G_AND_DGDY      ','ALL_DERIVATIVES ',&
-          'CONSTITUTION_ADJ','DIFFUSION_COEFF ','QUIT            ']
+          'CONSTITUTION_ADJ','DIFFUSION_COEFF ','QUIT            ',&
+          'DIFF_TH         ']
 !-------------------
 ! subcommands to ENTER
     character (len=16), dimension(ncent) :: center=&
@@ -1713,7 +1715,7 @@ contains
                   ' NOTE THAT dG/dy_i is NOT THE CHEMICAL POTENTIAL of i!')
 !             if(gx%bmperr.ne.0) goto 990
 !.......................................................
-          case(4,5) ! calculate phase with constitution_adjustment
+          case(4,5,7) ! calculate phase with constitution_adjustment
 ! or derivatives of chemical potentials and mobility data
 ! convert to phase tuple here as that is used in the application call
              do jp=1,nooftup()
@@ -1774,7 +1776,7 @@ contains
                 write(kou,2087)xxx,(yarr(nv),nv=1,noel())
 2087            format(/'Calculated Gibbs energy/FU/RT: ',1pe14.6,&
                      ' and the chemical potentials/RT:'/6(1pe12.4))
-             else
+             else if(kom3.eq.5) then
 !.............................................
 ! calculate phase diffusion: chem.pot derivatives and mobilities
 ! mugrad(I,J) are derivatives of the chemical potential of endmember I
@@ -1814,6 +1816,41 @@ contains
                 write(kou,2098)noel()
 2098            format(/'Mobility values mols/m2/s ?? for',i3,' components')
                 write(kou,2095)1,(mobilities(jp),jp=1,noel())
+                !CCI
+                deallocate(mugrad)
+                deallocate(mobilities)
+                call list_defined_properties(lut)
+                !CCI
+             else
+                call get_sublattice_number(phtup%ixphase,nsub,ceq)
+                allocate(nkl(nsub))
+                allocate(nsites(nsub))
+                call get_sublattice_structure(phtup%ixphase,phtup%compset,nsub,nkl,nsites,ceq)
+                nend=1
+                do nv=1,nsub
+                  nend = nend * nkl(nv)
+                enddo
+                deallocate(nkl)
+                deallocate(nsites)
+                allocate(mugrad(nend*nend))
+                allocate(mobilities(noel()))
+                mugrad(:)=zero
+                mobilities(:)=zero
+
+                call equilph1d_th(phtup,ceq%tpval(1),ceq%tpval(2),xknown,yarr,&
+                     nend,mugrad,mobilities,ceq)
+                if(gx%bmperr.ne.0) goto 990
+                write(kou,3096)noel()
+3096            format(/'Chemical potential derivative matrix, dG_I/dn_J for ',&
+                     i3,' elements')
+                write(kou,3094)(nv,nv=1,noel())
+3094            format(3x,6(6x,i6)/(3x,6i12))
+                do nv=0,noel()-1
+! An extra LF is generated when just 6 components!! use ll, kp j4, i2
+                   write(kou,3095)nv+1,(mugrad(noel()*nv+jp),jp=1,noel())
+!2095               format(i3,6(1pe12.4)/(3x,6e12.4))
+3095               format(i3,6(1pe12.4)/(3x,6e12.4))
+                enddo
                 !CCI
                 deallocate(mugrad)
                 deallocate(mobilities)

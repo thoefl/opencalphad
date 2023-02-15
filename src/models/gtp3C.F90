@@ -754,7 +754,7 @@
    if(.not.gtp_error_message(0)) then
 ! just use G, H and S here as the heading state the SER refernce state is used
       write(lut,12)x1,x1/xn,x2,x3
-12    format('G= ',1pe12.5,' J, G/N=',1pe11.4,' J/mol, H=',1pe11.4,&
+12    format('G= ',1pe23.16,' J, G/N=',1pe11.4,' J/mol, H=',1pe11.4,&
            ' J, S=',1pe10.3,' J/K')
 !CCI end
    endif
@@ -828,7 +828,7 @@
 !      endif
       write(lut,10)name(1:16),x1,x2,x3,x4,encoded(1:16)
 !10    format(a,3(1pe12.4),2x,a)
-10    format(a,1pe12.4,0pf9.5,2(1pe12.4),2x,a)
+10    format(a,1pe12.4,0pf9.5,2(1pe22.14),2x,a)
    enddo
 1000 continue
    return

@@ -13,6 +13,12 @@ character*8, parameter :: savefile='OCF-3.20'
 !
 !----------------------------------------------------------------------
 !
+! Single precision real numbers
+integer, parameter :: sp = selected_real_kind(6)
+
+! Double precision real numbers
+integer, parameter :: dp = selected_real_kind(15)
+!
 ! Parameters defining the size of arrays etc.
 ! max elements, species, phases, sublattices, constituents (ideal phase)
 ! NOTE increasing maxph to 600 and maxtpf to 80*maxph made the equilibrium
